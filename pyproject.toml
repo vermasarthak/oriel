@@ -1,0 +1,5 @@
+[project]
+name = "oriel"
+version = "0.0.1"
+description = "Evaluation-driven routing for structured AI tasks"
+requires-python = ">=3.11"
