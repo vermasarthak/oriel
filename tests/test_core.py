@@ -1,12 +1,15 @@
 import random
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parents[1] / "src"))
 
+from oriel.dataset import load_jsonl
 from oriel.evaluator import evaluate_json_object
 from oriel.router import Constraints, choose, wilson_lower_bound
+from oriel.runner import run_cases
 from oriel.store import Aggregate, TrialStore
 
 
@@ -27,3 +30,16 @@ class CoreTests(unittest.TestCase):
         decision = choose([sparse, proven], constraints, random.Random(7))
         self.assertEqual(decision.model, "reliable")
         self.assertLess(wilson_lower_bound(1, 1), 0.9)
+
+    def test_runner_records_versioned_evaluation_evidence(self) -> None:
+        class FakeModel:
+            def generate(self, input_text: str) -> tuple[str, float, float]:
+                return ('{"intent":"refund","priority":"high"}', 3, 7)
+
+        with tempfile.TemporaryDirectory() as directory:
+            dataset = Path(directory) / "cases.jsonl"
+            dataset.write_text('{"id":"refund","input":"refund please","required":{"intent":"refund","priority":"high"}}\n')
+            store = TrialStore()
+            summary = run_cases(store, "intent", "fake-v1", "prompt-1", FakeModel(), load_jsonl(dataset))
+        self.assertEqual(summary.passed, 1)
+        self.assertEqual(store.aggregates("intent", "prompt-1")[0].successes, 1)

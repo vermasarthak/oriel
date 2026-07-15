@@ -1,0 +1,2 @@
+{"id":"billing-refund","input":"I was charged twice and want a refund","required":{"intent":"refund","priority":"high"}}
+{"id":"password-reset","input":"I cannot sign in; reset my password","required":{"intent":"password_reset","priority":"normal"}}

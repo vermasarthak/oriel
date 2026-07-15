@@ -1,7 +1,7 @@
 # Oriel architecture
 
 ```text
-evaluation cases -> structured evaluator -> immutable SQLite trial store
+versioned JSONL cases -> model runner -> structured evaluator -> immutable SQLite trial store
                                       -> aggregates -> constrained router -> decision evidence
 ```
 

@@ -17,4 +17,8 @@ A model router should be a constrained decision system, not a hard-coded fallbac
 - low-sample models are penalized through a Wilson lower bound; and
 - no eligible model is selected merely because it is cheap.
 
+## Evaluation data
+
+Evaluation cases are JSONL records with an immutable case ID, an input, and the expected structured fields. `examples/intent-routing.jsonl` is a tiny runnable fixture, not a performance claim. The runner records model/prompt evidence under a new prompt version rather than mutating earlier trials.
+
 See [ARCHITECTURE.md](ARCHITECTURE.md) for the decision flow and [docs/adr/0001-quality-before-cost.md](docs/adr/0001-quality-before-cost.md) for the key trade-off.
