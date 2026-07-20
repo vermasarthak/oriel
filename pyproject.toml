@@ -1,5 +1,10 @@
 [project]
 name = "oriel"
-version = "0.0.1"
-description = "Evaluation-driven routing for structured AI tasks"
+version = "0.1.0"
+description = "Evaluation-driven model router for structured AI tasks"
 requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.100.0",
+    "uvicorn>=0.23.0",
+    "pydantic>=2.0.0",
+]

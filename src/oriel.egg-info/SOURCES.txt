@@ -1,0 +1,14 @@
+README.md
+pyproject.toml
+src/oriel/__init__.py
+src/oriel/dataset.py
+src/oriel/evaluator.py
+src/oriel/router.py
+src/oriel/runner.py
+src/oriel/store.py
+src/oriel.egg-info/PKG-INFO
+src/oriel.egg-info/SOURCES.txt
+src/oriel.egg-info/dependency_links.txt
+src/oriel.egg-info/requires.txt
+src/oriel.egg-info/top_level.txt
+tests/test_core.py

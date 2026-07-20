@@ -19,9 +19,9 @@ class CoreTests(unittest.TestCase):
 
     def test_trials_are_immutable(self) -> None:
         store = TrialStore()
-        store.record("classification", "one", "model-a", "v1", "input", True, 10, 2)
+        store.record("tenant-1", "classification", "one", "model-a", "v1", "input", True, 10, 2)
         with self.assertRaisesRegex(ValueError, "duplicate"):
-            store.record("classification", "one", "model-a", "v1", "input", False, 10, 2)
+            store.record("tenant-1", "classification", "one", "model-a", "v1", "input", False, 10, 2)
 
     def test_router_rejects_sparse_perfect_candidate(self) -> None:
         sparse = Aggregate("cheap", 1, 1, 1, 1)
@@ -40,6 +40,6 @@ class CoreTests(unittest.TestCase):
             dataset = Path(directory) / "cases.jsonl"
             dataset.write_text('{"id":"refund","input":"refund please","required":{"intent":"refund","priority":"high"}}\n')
             store = TrialStore()
-            summary = run_cases(store, "intent", "fake-v1", "prompt-1", FakeModel(), load_jsonl(dataset))
+            summary = run_cases(store, "tenant-1", "intent", "fake-v1", "prompt-1", FakeModel(), load_jsonl(dataset))
         self.assertEqual(summary.passed, 1)
-        self.assertEqual(store.aggregates("intent", "prompt-1")[0].successes, 1)
+        self.assertEqual(store.aggregates("tenant-1", "intent", "prompt-1")[0].successes, 1)
