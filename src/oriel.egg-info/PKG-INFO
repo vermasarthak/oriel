@@ -6,3 +6,9 @@ Requires-Python: >=3.11
 Requires-Dist: fastapi>=0.100.0
 Requires-Dist: uvicorn>=0.23.0
 Requires-Dist: pydantic>=2.0.0
+Requires-Dist: httpx>=0.25.0
+Requires-Dist: openai>=1.0.0
+Provides-Extra: ui
+Requires-Dist: streamlit>=1.28.0; extra == "ui"
+Requires-Dist: pandas>=2.1.0; extra == "ui"
+Requires-Dist: altair>=5.1.0; extra == "ui"

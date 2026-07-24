@@ -1,6 +1,7 @@
 README.md
 pyproject.toml
 src/oriel/__init__.py
+src/oriel/api.py
 src/oriel/dataset.py
 src/oriel/evaluator.py
 src/oriel/router.py
@@ -11,4 +12,5 @@ src/oriel.egg-info/SOURCES.txt
 src/oriel.egg-info/dependency_links.txt
 src/oriel.egg-info/requires.txt
 src/oriel.egg-info/top_level.txt
+tests/test_api.py
 tests/test_core.py
