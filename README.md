@@ -172,7 +172,7 @@ All endpoints except `/healthz` require `Authorization: Bearer <token>`.
 
 ## Documentation
 
-- [ARCHITECTURE.md](ARCHITECTURE.md) — decision flow diagram and component overview
+- [ARCHITECTURE.md](ARCHITECTURE.md) — full architecture: data flow, Wilson formula, fail-closed design, API reference, limitations
 - [DESIGN_DECISIONS.md](DESIGN_DECISIONS.md) — ADR-style rationale for Wilson bounds, Thompson sampling, immutable evidence, binary labels, SQLite choice
 - [BENCHMARKS.md](BENCHMARKS.md) — real measured throughput and latency
 - [SECURITY.md](SECURITY.md) — threat model and security controls
