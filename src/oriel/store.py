@@ -34,6 +34,10 @@ class TrialStore:
         self, tenant_id: str, task: str, case_id: str, model: str, prompt_version: str,
         input_text: str, passed: bool, latency_ms: float, cost_microusd: float,
     ) -> None:
+        if latency_ms < 0:
+            raise ValueError("latency_ms must be non-negative")
+        if cost_microusd < 0:
+            raise ValueError("cost_microusd must be non-negative")
         input_hash = hashlib.sha256(input_text.encode()).hexdigest()
         try:
             self.connection.execute(
