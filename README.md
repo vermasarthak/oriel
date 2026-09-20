@@ -30,6 +30,47 @@ python3 -m venv venv && source venv/bin/activate
 pip install -e .
 ```
 
+### Storage backends
+
+**SQLite (default — no extra dependencies)**
+
+SQLite is used by default. All data is stored in a local file or in-memory:
+
+```bash
+# In-memory (default, resets on restart)
+uvicorn oriel.api:app
+
+# Persistent file
+ORIEL_DB_PATH=/var/lib/oriel/oriel.db uvicorn oriel.api:app
+```
+
+> **Limitation:** SQLite uses a file-level write lock and cannot be shared across multiple processes or machines. Use Postgres for multi-instance deployments.
+
+**Postgres (optional — recommended for production)**
+
+Install the Postgres extra and set `DATABASE_URL`:
+
+```bash
+pip install "oriel[postgres]"
+
+DATABASE_URL=postgresql://user:password@localhost:5432/oriel \
+  uvicorn oriel.api:app
+```
+
+The Postgres backend creates the `trials` table automatically on startup. It uses the same `record` / `aggregates` interface as the SQLite backend — no application code changes required.
+
+To run a local Postgres instance:
+
+```bash
+docker run -d \
+  -e POSTGRES_USER=oriel -e POSTGRES_PASSWORD=oriel_dev_only -e POSTGRES_DB=oriel \
+  -p 5432:5432 postgres:15
+
+DATABASE_URL=postgresql://oriel:oriel_dev_only@localhost:5432/oriel \
+  uvicorn oriel.api:app
+```
+
+
 ### 1. Submit evaluation evidence
 
 ```bash

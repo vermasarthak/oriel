@@ -32,7 +32,27 @@ def get_tenant_id(api_key: str = Security(api_key_header)) -> str:
 
 TenantDep = Annotated[str, Depends(get_tenant_id)]
 
-store = TrialStore(os.getenv("ORIEL_DB_PATH", ":memory:"))
+def _make_store():
+    """Select storage backend based on DATABASE_URL environment variable.
+
+    - If DATABASE_URL starts with "postgresql://", use PostgresTrialStore.
+    - Otherwise fall back to SQLite TrialStore (default, backward-compatible).
+    """
+    database_url = os.getenv("DATABASE_URL", "")
+    if database_url.startswith("postgresql://"):
+        try:
+            from .store_postgres import PostgresTrialStore
+            return PostgresTrialStore(database_url)
+        except ImportError as exc:
+            raise RuntimeError(
+                'DATABASE_URL is a Postgres URL but psycopg is not installed. '
+                'Run: pip install "oriel[postgres]"'
+            ) from exc
+    # Default: SQLite
+    return TrialStore(os.getenv("ORIEL_DB_PATH", ":memory:"))
+
+store = _make_store()
+
 rng = random.Random()
 
 class EvaluateRequest(BaseModel):
