@@ -252,3 +252,5 @@ MIT
 <!-- Benchmark metric log for oriel -->
 
 <!-- Audit patch 3 -->
+
+<!-- Audit patch 8 -->
