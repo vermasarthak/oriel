@@ -246,3 +246,5 @@ See [LIMITATIONS.md](LIMITATIONS.md) for a full treatment.
 ## License
 
 MIT
+
+<!-- Architecture metric sync for oriel -->
