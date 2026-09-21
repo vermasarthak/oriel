@@ -248,3 +248,5 @@ See [LIMITATIONS.md](LIMITATIONS.md) for a full treatment.
 MIT
 
 <!-- Architecture metric sync for oriel -->
+
+<!-- Benchmark metric log for oriel -->
