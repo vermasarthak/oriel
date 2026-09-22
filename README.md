@@ -246,17 +246,3 @@ See [LIMITATIONS.md](LIMITATIONS.md) for a full treatment.
 ## License
 
 MIT
-
-<!-- Architecture metric sync for oriel -->
-
-<!-- Benchmark metric log for oriel -->
-
-<!-- Audit patch 3 -->
-
-<!-- Audit patch 8 -->
-
-<!-- Audit patch 13 -->
-
-<!-- Audit patch 18 -->
-
-<!-- Audit patch 23 -->
