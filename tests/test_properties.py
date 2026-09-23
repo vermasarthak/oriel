@@ -3,7 +3,6 @@ Property and invariant tests for Oriel's routing logic.
 These tests make no assumptions about specific models — they verify
 that routing constraints are *always* enforced regardless of input.
 """
-import math
 import random
 import sys
 import unittest
@@ -212,6 +211,7 @@ class CrashResumeTests(unittest.TestCase):
 
     def test_evidence_persists_across_store_instances(self):
         import tempfile
+
         from oriel.store import TrialStore
 
         with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
@@ -234,6 +234,7 @@ class CrashResumeTests(unittest.TestCase):
 
     def test_duplicate_rejected_after_crash_resume(self):
         import tempfile
+
         from oriel.store import TrialStore
 
         with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:

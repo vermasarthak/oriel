@@ -2,7 +2,7 @@ import os
 import random
 from typing import Annotated, Any
 
-from fastapi import Depends, FastAPI, HTTPException, Request, Security, status, BackgroundTasks
+from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException, Security, status
 from fastapi.security import APIKeyHeader
 from pydantic import BaseModel, Field
 
@@ -76,12 +76,12 @@ def create_evaluation_run(req: EvaluateRequest, tenant_id: TenantDep, background
         cases = [Case(id=c["id"], input_text=c["input"], required=c["required"]) for c in req.cases]
     except KeyError:
         raise HTTPException(status_code=400, detail="Invalid cases format")
-    
+
     if req.use_real_provider and HAS_PROVIDERS and os.getenv("OPENAI_API_KEY"):
         model = OpenAIProvider(model_name=req.model_name)
     else:
         model = DeterministicFakeModel()
-        
+
     summary = run_cases(store, tenant_id, req.task, req.model_name, req.prompt_version, model, cases)
     return EvaluateResponse(total=summary.total, passed=summary.passed)
 

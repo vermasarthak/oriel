@@ -48,7 +48,9 @@ def choose(candidates: list[Aggregate], constraints: Constraints, rng: random.Ra
         return Decision(None, "no_eligible_candidate", None)
     def score(entry: tuple[Aggregate, float]) -> float:
         candidate, _ = entry
-        sampled_quality = rng.betavariate(candidate.successes + 1, candidate.total - candidate.successes + 1)
+        safe_successes = max(0, min(candidate.successes, candidate.total))
+        safe_failures = max(0, candidate.total - safe_successes)
+        sampled_quality = rng.betavariate(safe_successes + 1, safe_failures + 1)
         return sampled_quality - constraints.cost_weight * candidate.mean_cost_microusd - constraints.latency_weight * candidate.mean_latency_ms
     candidate, lower = max(eligible, key=score)
     return Decision(candidate.model, "eligible", lower)

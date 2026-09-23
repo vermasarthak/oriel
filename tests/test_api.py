@@ -3,9 +3,7 @@ API end-to-end tests for Oriel.
 Tests cover: authentication, routing, outcomes, no-eligible-candidate, tenant isolation,
 malformed input, duplicate outcome rejection via background task flush.
 """
-import os
 import sys
-import time
 import unittest
 from pathlib import Path
 

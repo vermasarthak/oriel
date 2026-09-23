@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-import time
 import os
+import time
 from typing import Optional
+
 from .runner import Model
 
 try:
-    import openai
+    import openai  # noqa: F401
     from openai import OpenAI
     HAS_OPENAI = True
 except ImportError:
@@ -20,14 +21,14 @@ class OpenAIProvider(Model):
     def __init__(self, model_name: str, api_key: Optional[str] = None, timeout: float = 10.0):
         if not HAS_OPENAI:
             raise ImportError("openai package is required for OpenAIProvider")
-        
+
         key = api_key or os.environ.get("OPENAI_API_KEY")
         if not key:
             raise ValueError("OPENAI_API_KEY is required to use OpenAIProvider")
-            
+
         self.client = OpenAI(api_key=key, timeout=timeout)
         self.model_name = model_name
-        
+
         self.pricing_microusd = {
             "gpt-3.5-turbo": 1500,
             "gpt-4o-mini": 300,
@@ -48,16 +49,16 @@ class OpenAIProvider(Model):
                 max_tokens=1024,
             )
             provider_latency_ms = (time.perf_counter() - start_time) * 1000
-            
+
             output = response.choices[0].message.content or "{}"
-            
+
             usage = response.usage
             total_tokens = usage.total_tokens if usage else 0
             rate = self.pricing_microusd.get(self.model_name, 5000)
             cost_microusd = (total_tokens / 1000.0) * rate
-            
+
             return output, provider_latency_ms, cost_microusd
-            
+
         except Exception:
             # Silently fail and return empty JSON so evaluator records a failure
             provider_latency_ms = (time.perf_counter() - start_time) * 1000

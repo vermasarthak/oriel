@@ -1,8 +1,10 @@
+import math
+import os
 import sqlite3
+
+import altair as alt
 import pandas as pd
 import streamlit as st
-import altair as alt
-import os
 
 st.set_page_config(page_title="Oriel Router Dashboard", layout="wide")
 
@@ -44,9 +46,9 @@ try:
         )"""
     )
     seed_data(conn)
-    
+
     df = pd.read_sql_query("""
-        SELECT 
+        SELECT
             model,
             SUM(passed) as successes,
             COUNT(*) as total,
@@ -56,12 +58,12 @@ try:
         WHERE tenant_id='tenant-1' AND task='intent-routing' AND prompt_version='v1'
         GROUP BY model
     """, conn)
-    
+
 except Exception as e:
     st.error(f"Failed to load database: {e}")
     st.stop()
 
-import math
+
 def wilson_lower_bound(successes: int, total: int, z: float = 1.96) -> float:
     if total == 0:
         return 0.0

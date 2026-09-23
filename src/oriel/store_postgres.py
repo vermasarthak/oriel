@@ -11,8 +11,6 @@ or:
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-
 try:
     import psycopg
     from psycopg.rows import tuple_row

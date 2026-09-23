@@ -121,7 +121,7 @@ def bench_reproducibility():
         results.append(run)
 
     all_same = all(r == results[0] for r in results)
-    print(f"  3 runs with seed=7, 10 decisions each:")
+    print("  3 runs with seed=7, 10 decisions each:")
     print(f"  Run 1: {results[0]}")
     print(f"  Run 2: {results[1]}")
     print(f"  Run 3: {results[2]}")
@@ -129,7 +129,7 @@ def bench_reproducibility():
 
 
 if __name__ == "__main__":
-    print(f"\nOriel Benchmarks")
+    print("\nOriel Benchmarks")
     print(f"Hardware: {HARDWARE}")
     bench_write_throughput()
     bench_routing_latency()
