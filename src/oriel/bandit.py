@@ -1,10 +1,10 @@
-"""Contextual Thompson Sampling Router for Oriel."""
+"""Thompson Sampling Multi-Armed Bandit Router for Oriel."""
 
 from __future__ import annotations
 
 import random
 from dataclasses import dataclass
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 
 @dataclass
@@ -17,20 +17,26 @@ class CandidateArm:
     beta: float = 1.0
 
 
-class ContextualThompsonSamplingRouter:
-    """Contextual Thompson Sampling Multi-Armed Bandit Router."""
+class ThompsonSamplingRouter:
+    """Multi-Armed Bandit Router using Thompson Sampling over Beta posteriors."""
 
-    def __init__(self, candidates: List[CandidateArm], quality_threshold: float = 0.7):
+    def __init__(
+        self,
+        candidates: List[CandidateArm],
+        quality_threshold: float = 0.7,
+        rng: Optional[random.Random] = None,
+    ):
         self.candidates = {c.model_id: c for c in candidates}
         self.quality_threshold = quality_threshold
+        self.rng = rng if rng is not None else random.Random()
 
     def select_candidate(
         self,
-        context: Dict[str, float] = None,
         max_cost: Optional[float] = None,
         max_latency_ms: Optional[float] = None,
+        context: Optional[dict] = None,
     ) -> Optional[str]:
-        """Selects candidate model using Thompson Sampling subject to context and SLA constraints."""
+        """Selects candidate model using Thompson Sampling subject to cost and latency constraints."""
         eligible = []
         for model_id, arm in self.candidates.items():
             if max_cost is not None and arm.cost_per_1k_tokens > max_cost:
@@ -40,13 +46,14 @@ class ContextualThompsonSamplingRouter:
 
             safe_alpha = max(arm.alpha, 1e-6)
             safe_beta = max(arm.beta, 1e-6)
-            sampled_quality = random.betavariate(safe_alpha, safe_beta)
+            sampled_quality = self.rng.betavariate(safe_alpha, safe_beta)
             if sampled_quality >= self.quality_threshold:
                 eligible.append((model_id, sampled_quality, arm.cost_per_1k_tokens))
 
         if not eligible:
             return None
 
+        # Sort by expected quality-to-cost ratio
         eligible.sort(key=lambda x: (x[1] / max(x[2], 1e-6)), reverse=True)
         return eligible[0][0]
 
@@ -60,7 +67,7 @@ class ContextualThompsonSamplingRouter:
                 arm.beta += weight
 
     def export_priors(self) -> dict[str, tuple[float, float]]:
-        """Exports alpha and beta parameters for Redis/Postgres persistence."""
+        """Exports alpha and beta parameters for persistence."""
         return {m: (arm.alpha, arm.beta) for m, arm in self.candidates.items()}
 
     def import_priors(self, priors: dict[str, tuple[float, float]]):
@@ -69,3 +76,7 @@ class ContextualThompsonSamplingRouter:
             if m in self.candidates:
                 self.candidates[m].alpha = a
                 self.candidates[m].beta = b
+
+
+# Alias for backward compatibility
+ContextualThompsonSamplingRouter = ThompsonSamplingRouter
